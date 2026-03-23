@@ -1,0 +1,68 @@
+openapi: 3.0.0
+info:
+  title: GitHub Organization Access Report API
+  description: API to generate access reports for GitHub Organizations
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api
+    description: Local server
+paths:
+  /access-report:
+    get:
+      summary: Get access report for a GitHub organization
+      parameters:
+        - in: query
+          name: org
+          schema:
+            type: string
+          required: true
+          description: Name of the GitHub organization
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessReport'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized (Invalid PAT)
+        '403':
+          description: Forbidden (Rate limit exceeded)
+        '404':
+          description: Organization not found
+        '500':
+          description: Internal server error
+components:
+  schemas:
+    AccessReport:
+      type: object
+      properties:
+        organization:
+          type: string
+        total_users:
+          type: integer
+        total_repositories:
+          type: integer
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserAccess'
+    UserAccess:
+      type: object
+      properties:
+        username:
+          type: string
+        repositories:
+          type: array
+          items:
+            $ref: '#/components/schemas/RepoPermission'
+    RepoPermission:
+      type: object
+      properties:
+        repo:
+          type: string
+        permission:
+          type: string
+          enum: [admin, write, read]
