@@ -97,3 +97,4 @@ You can interact with the API using Swagger UI by navigating to:
 - **Batching & Promises (`Promise.all`)**: Repositories are fetched sequentially to fetch lists of collaborators but batched inside to strike a balance between speed and getting blocked by GitHub secondary rate limits.
 - **Winston for Logging**: Industry standard to handle logs. Replaces basic `console.log`.
 - **Node-Cache**: Super simple in-memory caching to protect our GitHub quota if multiple identical requests occur back-to-back. Redis could be swapped in simply for multi-instance deployments.
+- **User Profile Graceful Fallback**: If an organization is not found (404), the API intelligently attempts to scan it as a standard User profile instead, pulling personal repositories to aid in testing and flexibility.
